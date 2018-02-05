@@ -1,50 +1,45 @@
-> More : https://basarat.gitbooks.io/typescript/docs/types/typeGuard.html
+Today we are going to be demonstrating how to create a retry wrapper for any async function
 
-Today we are going to be demonstrating `in` based type guards which is a new feature in TypeScript 2.7
-
-Say you have an interface `Foo` with property `foo` of type number
-And and interface `Bar` with a property `bar` of type string
-And you have a use case where a value might be of type `Foo` or `Bar` represented here as a union type
+Let's kickoff with an example function that only works every second time you call it
 
 ```js
-interface Foo {
-  foo: number
-}
-interface Bar {
-  bar: string
-}
-
-type Union = Foo | Bar;
-```
-
-Before TypeScript 2.7, if you wanted to discriminate between such interfaces you needed to write a custom type guard. One simple type guard function would use a simple assertion followed by a type check.
-
-```js
-function isFoo(value: Union): value is Foo {
-  return typeof (value as Foo).foo === 'number';
-}
-```
-
-Using this type guard was fairly easy e.g. we have a test function that takes a union and wants to do something special with values of type Foo.
-It can do this after making a call to our custom type guard.
-
-```js
-function test(value: Union) {
-  if (isFoo(value)) {
-    console.log(value.foo) // Okay!
+let _everySecond = 0;
+async function everySecond() {
+  if (++_everySecond % 2 == 0) {
+    return 'success';
   }
+  throw new Error('fail');
 }
 ```
-Now with TypeScript 2.7 you no longer need to create a custom type guard for filtering between such types ***delete isFoo***. You can use the standard javascript `in` operator.
+
+This is just a place holder for a real world function that works unreliably. 
+
+We can demonstrate this by calling this from a main function
 
 ```js
-function test(value: Union) {
-  if ('foo' in value) {
-    console.log(value.foo) // Okay!
+async function main() {
+  try {
+    console.log(await everySecond()); // First call 
   }
+  catch (e) {
+    console.log((e as Error).message);
+  }
+  console.log(await everySecond()); // Second call 
+  try {
+    console.log(await everySecond()); // Third call 
+  }
+  catch (e) {
+    console.log((e as Error).message);
+  }
+  console.log(await everySecond()); // Fourth call 
 }
+
+main();
 ```
 
-This just another example of TypeScript understanding and standardizing best practices for JavaScript development.
+***Run demo***
+You can see that the first call fails and the second call succeeds, the third call fails and then the fourth call succeeds. 
 
-> If you enjoyed this video and would like to learn more JavaScript best practices, don't forget to subscribe. Thank you!
+Now lets write a simple retry utility function. 
+
+ 
