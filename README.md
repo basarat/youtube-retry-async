@@ -1,3 +1,5 @@
+# Automatically retry an async await function n times.
+
 Today we are going to be demonstrating how to create a retry wrapper for any async function
 
 Let's kickoff with an example function that only works every second time you call it
