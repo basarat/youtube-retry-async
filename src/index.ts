@@ -1,26 +1,30 @@
-let _everySecond = 0;
-async function everySecond() {
-  if (++_everySecond % 2 == 0) {
+let _track = 0;
+async function sometimesSucceeds() {
+  if (++_track % 5 == 0) {
     return 'success';
   }
   throw new Error('fail');
 }
 
+async function retry<T>(fn: () => Promise<T>, n: number): Promise<T> {
+  let lastError: any;
+  for (let index = 0; index < n; index++) {
+    try {
+      return await fn();
+    }
+    catch (e) {
+      lastError = e;
+    }
+  }
+  throw lastError;
+}
+
 async function main() {
-  try {
-    console.log(await everySecond()); // First call 
-  }
-  catch (e) {
-    console.log((e as Error).message);
-  }
-  console.log(await everySecond()); // Second call 
-  try {
-    console.log(await everySecond()); // Third call 
-  }
-  catch (e) {
-    console.log((e as Error).message);
-  }
-  console.log(await everySecond()); // Fourth call 
+  const safe = () => retry(sometimesSucceeds, 10);
+  console.log(await safe());
+  console.log(await safe());
+  console.log(await safe());
+  console.log(await safe());
 }
 
 main();
