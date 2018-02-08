@@ -1,4 +1,12 @@
-# Automatically retry an async await function n times.
+# Youtube checklist
+## Before publishing
+* Delete cursor
+* Mix to mono
+## After publishing
+* Add monetization
+* Add end screen
+
+# Automatically retry an async await function n times
 
 ## Description
 In this lesson we go through the thought process of creating a simple retry utility wrapper for *any* async function 🌹
@@ -8,7 +16,7 @@ In this lesson we go through the thought process of creating a simple retry util
 `#TypeScript #JavaScript #AsyncAwait #ReactJS #NodeJS #AngularJS`
 
 ## Tags
-TypeScript JavaScript Async Await ReactJS NodeJS AngularJS
+TypeScript,JavaScript,Async,Await,ReactJS,NodeJS,AngularJS
 
 ## Narration
 Today we are going to be demonstrating how to create an easily reuseable retry wrapper for any async function
