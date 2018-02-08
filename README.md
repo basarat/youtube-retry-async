@@ -1,6 +1,17 @@
 # Automatically retry an async await function n times.
 
-Today we are going to be demonstrating how to create a retry wrapper for any async function
+## Description
+In this lesson we go through the thought process of creating a simple retry utility wrapper for *any* async function 🌹
+
+## Share
+<description> plus
+`#TypeScript #JavaScript #AsyncAwait #ReactJS #NodeJS #AngularJS`
+
+## Tags
+TypeScript JavaScript Async Await ReactJS NodeJS AngularJS
+
+## Narration
+Today we are going to be demonstrating how to create an easily reuseable retry wrapper for any async function
 
 Let's kickoff with an example function that only works every second time you call it
 
@@ -14,41 +25,41 @@ async function sometimesSucceeds() {
 }
 ```
 
-This is just a place holder for a real world function that works unreliably. 
+This is just a place holder for a real world function that works unreliably.
 
-We can demonstrate this by calling this from a main function
+We can demonstrate this unreliability, by calling this from a main function
 
 ```js
 async function main() {
   try {
-    console.log(await sometimesSucceeds()); // First call 
+    console.log(await sometimesSucceeds()); // First call
   }
   catch (e) {
     console.log((e as Error).message);
   }
-  console.log(await sometimesSucceeds()); // Second call 
+  console.log(await sometimesSucceeds()); // Second call
   try {
-    console.log(await sometimesSucceeds()); // Third call 
+    console.log(await sometimesSucceeds()); // Third call
   }
   catch (e) {
     console.log((e as Error).message);
   }
-  console.log(await sometimesSucceeds()); // Fourth call 
+  console.log(await sometimesSucceeds()); // Fourth call
 }
 
 main();
 ```
 
 ***Run demo***
-You can see that the first call fails and the second call succeeds, the third call fails and then the fourth call succeeds. 
-
-Now lets write a simple retry utility function. 
-* Its takes an function that returns a promise of type T, 
-* And a number of attempts to try 
+We can add reliabitily to this function by wrapping it with a simple retry utility.
+* Our retry utility takes an function that returns a promise of type T,
+* And a number of attempts to try
 * This function itself returns a promise of type T
-  * Within body we track any last error 
-  * Next we try to call the function n times tracking the last error at each point, 
+  * Within body we track any last error
+  * Next we try to call the function n times tracking the last error at each point,
 * If the function never succeeds in the n times we throw the last error.
+
+You can see that async await makes asynchronous retry wrappers just as easy as synchronous retry wrappers.
 
 ```js
 async function retry<T>(fn: () => Promise<T>, n: number): Promise<T> {
@@ -67,7 +78,7 @@ async function retry<T>(fn: () => Promise<T>, n: number): Promise<T> {
 
 Now in our main function body we can easily create a safe version of the `sometimesSucceeds` function by wrapping it in a retry with 2 attempts.
 
-Now if we call this safe function you can see that it works every single time. 
+Now if we call this safe function, you can see that it works reliably every single time.
 
 ```js
 async function main() {
@@ -79,7 +90,7 @@ async function main() {
 }
 ```
 
-As a final example lets make the `sometimesSucceeds` function succeed only every 5th time and lets bump up our `safe` version to `10` reattempts
+As a final example to demonstrate reusability, lets make the `sometimesSucceeds` function succeed only every 5th time and lets bump up our `safe` version to `10` reattempts
 
 ```js
 let _track = 0;
@@ -98,6 +109,6 @@ async function main() {
 }
 ```
 
-You can see how any unsafe function can be scalled to a desired level of reliability.
+Using this pattern any unsafe function can be scaled to a desired level of reliability.
 
-> Thanks for watching, If you enjoyed this video and would like to learn more JavaScript patterns and practices don't forget to subscribe.
+> As always, thanks for watching and I would love to hear your thoughts in the comments section below.
