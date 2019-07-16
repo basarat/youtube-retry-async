@@ -1,4 +1,7 @@
 # Youtube checklist
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/basarat/youtube-retry-async.svg)](https://greenkeeper.io/)
+
 ## Before publishing
 * Delete cursor
 * Mix to mono
